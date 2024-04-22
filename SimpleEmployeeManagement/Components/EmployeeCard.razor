@@ -10,27 +10,19 @@
 <div class="card" >
 	<table border="1">
 	<div class="card-body">
-		<tr>
-		<th> First Name </th>
-		<th> Last Name </th>
-		<th> Department </th>
-		</tr>
-		<tr>
-		<td>  @Employees.First_name </td>
-		<td>  @Employees.Last_name </td>
-		<td>  @Employees.Department </td>
-		</tr>
-		<br />
-		<div class="actions">
-			<a href="@($"/edit/{Employees.Id}")" class="btn btn-warning shadow-none">
-				Edit
-			</a>
-			<button @onclick="OpenConfirmDialog" class="btn btn-danger shadow-none ms-3">
-				Delete
-			</button>
-		</div>
-		</div>
-	</table>
+		
+		<h5>Name:  @Employees.First_name  @Employees.Last_name</h5>					
+       
+	    <h5> Department:  @Employees.Department</h5>
+    </div>
+	<div class="actions">
+		<a href="@($"/edit/{Employees.Id}")" class="btn btn-warning shadow-none">
+			Edit
+		</a>
+		<button @onclick="OpenConfirmDialog" class="btn btn-danger shadow-none ms-3">
+			Delete
+		</button>
+	</div>
 	</div>
   
 <DeleteConfirm Show="showConfirmDialog" OnCancel="CancelDelete" OnOk="DeleteEmployee" />
