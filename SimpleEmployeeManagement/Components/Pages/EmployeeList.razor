@@ -1,0 +1,63 @@
+﻿@page "/"
+@inject IEmployeeRepository Repository
+@inject NavigationManager Navigation
+
+<h3>EmployeeList</h3>
+<div class="row justify-content-center">
+	<div class="col-6">
+		@if (employees is null)
+		{
+			<div class="">
+				Loading 
+			</div>
+
+		}
+		else if(employees.Any()){
+			foreach(var employees in employees)
+			{
+				<div class="">
+					<EmployeeCard Employees="employees" @rendermode="InteractiveServer"/>	
+
+						</div>
+			}
+
+		}
+		else
+		{
+			<div class="">
+				No Employee
+				</div>
+
+		}
+
+	</div>
+
+</div>
+
+
+@code {
+	private List<Employees>? employees;
+	protected override async Task OnInitializedAsync()
+	{
+		employees = await Repository.GetAllAsync();
+	}
+	private bool showConfirmDialog;
+	[Parameter]
+	public required Employees Employees{ get; set; }
+	private void OpenConfirmDialog()
+	{
+		showConfirmDialog = true;
+	}
+	private void CancelDelete()
+	{
+		showConfirmDialog = false;
+	}
+	private  async Task DeleteEmployee()
+	{
+		await Repository.DeleteAsync(Employees.Id);
+		showConfirmDialog = false;
+		Navigation.NavigateTo("/");
+
+	}
+
+}

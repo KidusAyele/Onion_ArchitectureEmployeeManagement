@@ -1,0 +1,20 @@
+﻿@page "/add-new"
+@inject IEmployeeRepository Repository
+@inject NavigationManager Navigation
+<PageTitle>
+
+	Add New Employee
+</PageTitle>
+<div class="row justify-content-center">
+<div class="col-6">
+	<EmployeeForm IsEditMode="false" onValidEmployeeSubmit="AddEmployee"/>
+		</div>
+		</div>
+	
+@code {
+	private async Task AddEmployee(Employees employees)
+	{
+		await Repository.AddAsync(employees);
+		Navigation.NavigateTo("/");
+	}
+}

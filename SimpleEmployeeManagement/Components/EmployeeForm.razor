@@ -1,0 +1,110 @@
+﻿@inject IEmployeeRepository Repository
+
+
+@if (Employee is not null)
+{
+	<EditForm Enhance="true" method="post" FormName="AddOrEditEmployee" OnValidSubmit="AddOrEditEmployee" Model="Employee" autocomplete="off">
+
+		<h3>
+			@Title
+		</h3>
+		if(IsEditMode){
+		<input type="hidden" name="Employees.Id" value="@Employee.Id" />
+		}
+		<div>
+			<label for="firstname" class="form-label">
+				First Name
+			</label>
+			<InputText id="firstname" @bind-Value="Employee.First_name" class="form-control shadow-name">
+
+			</InputText>
+
+		</div>
+		<div>
+			<label for="lastname" class="form-label">
+				Last Name
+			</label>
+			<InputText id="lastname" @bind-Value="Employee.Last_name" class="form-control shadow-name">
+
+			</InputText>
+
+		</div>
+		<div>
+			<label for="email" class="form-label">
+				email
+			</label>
+			<InputText id="email" @bind-Value="Employee.Email" class="form-control shadow-name">
+
+			</InputText>
+
+		</div>
+		<div class="mb-3">
+			<label for="registratindate" class="form-label">Registration Date</label>
+			<!-- Assuming you have a label element for displaying registration date -->
+
+			<InputDate id="registratindate" @bind-Value="Employee.RegistrationDate" class="form-control shadow-name"></InputDate>
+		</div>
+
+		<div>
+			<label for="department" class="form-label">
+				Department
+			</label>
+			<InputSelect id="department" @bind-Value="Employee.Department" class="form-control shadow-name">
+				<option value="0">
+					Select Department
+
+				</option>
+				@foreach (var department in Enum.GetValues(typeof(Department)))
+				{
+					<option value="@department">
+						@department.ToString();
+					</option>
+				}
+			</InputSelect>
+		</div>
+		<div class="mb-3">
+
+
+			<button class="btn-primary shadow-none">
+				Submit
+			</button>
+			<a href="/" class="btn btn-secondary shadow-none">
+				Back To List
+			</a>
+		</div>
+		<DataAnnotationsValidator />
+		<ValidationSummary />
+	</EditForm>
+}
+
+
+
+
+@code{
+	[Parameter]
+	public bool IsEditMode {get;set;}=false;
+	[Parameter]
+	public int EmployeeId { get; set; }
+		[Parameter]
+	public EventCallback<Employees> OnValidEmployessSubmit { get; set; }
+	[SupplyParameterFromForm]
+	public Employees? Employee { get; set; }
+	private string Title => IsEditMode ? $"Edit Employee {EmployeeId} " : "Add New Employee";
+	protected override async Task OnInitializedAsync()
+	{
+		if (IsEditMode)
+		{
+
+			Employee ??= await Repository.GetByIdAsync(EmployeeId);
+
+		}
+		else
+		{
+			Employee ??= new();
+		}
+	}
+	private async Task AddOrEditEmployee()
+	{
+		await OnValidEmployessSubmit.InvokeAsync(Employee);
+	}
+}

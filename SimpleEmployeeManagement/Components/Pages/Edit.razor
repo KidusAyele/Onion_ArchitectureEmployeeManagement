@@ -1,0 +1,25 @@
+﻿@page "/edit/{id:int}"
+@inject IEmployeeRepository Repository
+@inject NavigationManager Navigation
+<PageTitle >
+	Edit Employee
+</PageTitle>
+
+	<div class="row justify-content-center">
+<div class="col-6">
+<EmployeeForm IsEditMode="true" EmployeeId="@Id" OnValidEmployeeSubmit="EditEmployee"/>
+		</div>
+		</div>
+
+@code{
+	[Parameter]
+	public  int Id{ get; set; }
+	
+
+	private async Task EditEmployee(Employees employees){
+		
+			await Repository.UpdateAsync(employees);
+			Navigation.NavigateTo("/");
+		
+	} 
+}
